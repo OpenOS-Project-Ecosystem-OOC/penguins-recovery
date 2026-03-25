@@ -28,6 +28,8 @@ penguins-recovery/
 │   ├── debian/               # Debian-based rescue Live CD (from mini-rescue)
 │   ├── arch/                 # Arch-based disk rescue image (from platter-engineer)
 │   ├── uki/                  # Unified Kernel Image rescue (from rescue-image1)
+│   ├── uki-lite/             # Lightweight UKI from host kernel (objcopy)
+│   ├── lifeboat/             # Alpine-based single-file UEFI EFI (from lifeboat_linux)
 │   └── rescatux/             # Rescatux live-build based rescue CD (from rescatux)
 ├── tools/
 │   └── rescapp/              # GUI rescue wizard - Qt5/kdialog (from rescapp)
@@ -107,11 +109,13 @@ See [gui/README.md](gui/README.md) for architecture details.
 
 ## Standalone Builders
 
-| Builder | Base | Build Tool | Output | Source |
-|---------|------|------------|--------|--------|
-| debian  | Debian | debootstrap | ISO | [loaden/mini-rescue](https://github.com/loaden/mini-rescue) |
-| arch    | Arch Linux | mkarchiso | ISO | [RouHim/platter-engineer](https://github.com/RouHim/platter-engineer) |
-| uki     | Arch Linux | mkosi | EFI executable | [swsnr/rescue-image](https://github.com/swsnr/rescue-image) |
+| Builder  | Base | Build Tool | Output | Source |
+|----------|------|------------|--------|--------|
+| debian   | Debian | debootstrap | ISO | [loaden/mini-rescue](https://github.com/loaden/mini-rescue) |
+| arch     | Arch Linux | mkarchiso | ISO | [RouHim/platter-engineer](https://github.com/RouHim/platter-engineer) |
+| uki      | Arch Linux | mkosi | EFI executable | [swsnr/rescue-image](https://github.com/swsnr/rescue-image) |
+| uki-lite | host system | objcopy | EFI executable | — |
+| lifeboat | Alpine Linux | custom shell scripts | ~35 MB EFI executable | [hugochinchilla/lifeboat_linux](https://github.com/hugochinchilla/lifeboat_linux) |
 | rescatux | Debian | live-build | ISO | [rescatux/rescatux](https://github.com/rescatux/rescatux) |
 
 ## Tools
@@ -143,6 +147,8 @@ make bootloaders-all   # Build source bootloaders then package everything
 make debian            # Build Debian rescue ISO
 make arch              # Build Arch rescue ISO
 make uki               # Build UKI rescue EFI image
+make uki-lite          # Build lightweight UKI from host kernel
+make lifeboat          # Build Alpine-based single-file UEFI EFI
 make rescatux          # Build Rescatux ISO
 make clean             # Remove build artifacts
 ```
@@ -155,6 +161,7 @@ GPL-3.0. The `builders/uki/` directory retains its original EUPL-1.2 license
 ## Origins
 
 This project unifies:
+- [hugochinchilla/lifeboat_linux](https://github.com/hugochinchilla/lifeboat_linux) (Alpine-based single-file UEFI rescue EFI)
 - [pieroproietti/penguins-bootloaders](https://github.com/pieroproietti/penguins-bootloaders)
 - [loaden/mini-rescue](https://github.com/loaden/mini-rescue)
 - [RouHim/platter-engineer](https://github.com/RouHim/platter-engineer)

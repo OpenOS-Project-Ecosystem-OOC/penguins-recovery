@@ -1,4 +1,4 @@
-.PHONY: help bootloaders debian arch uki rescatux rescapp adapt clean
+.PHONY: help bootloaders debian arch uki uki-lite lifeboat rescatux rescapp adapt clean
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-16s %s\n", $$1, $$2}'
@@ -25,6 +25,9 @@ uki: ## Build UKI rescue EFI image (requires mkosi, systemd-ukify)
 uki-lite: ## Build lightweight rescue UKI from host kernel (requires binutils, EFI stub)
 	cd builders/uki-lite && sudo ./build.sh --output rescue.efi
 
+lifeboat: ## Build Alpine-based single-file UEFI rescue EFI (requires gcc, make, wget, fakeroot)
+	cd builders/lifeboat && $(MAKE) build
+
 rescatux: ## Build Rescatux ISO (requires live-build, root)
 	cd builders/rescatux && sudo ./make-rescatux.sh
 
@@ -48,6 +51,9 @@ clean: ## Remove build artifacts
 	rm -rf builders/arch/work builders/arch/out
 	rm -rf builders/uki/mkosi.builddir builders/uki/mkosi.cache
 	rm -f builders/uki-lite/rescue.efi
+	rm -rf builders/lifeboat/build/alpine-minirootfs* builders/lifeboat/build/linux*
+	rm -f  builders/lifeboat/build/config.initramfs_root
+	rm -f  builders/lifeboat/dist/LifeboatLinux.efi
 	rm -rf builders/rescatux/rescatux-release
 	rm -rf recovery-manager/target
 	rm -rf /tmp/penguins-recovery-work

@@ -168,3 +168,4 @@ Upstream commit: https://github.com/pieroproietti/penguins-bootloaders/commit/$S
           git commit -m "chore(bootloaders): record upstream SHA $SHA (no content change)"
           git push origin main
           git branch -D upstream-bootloaders-sync 2>/dev/null || true
+

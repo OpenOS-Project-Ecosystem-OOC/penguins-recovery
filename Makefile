@@ -1,4 +1,4 @@
-.PHONY: help bootloaders debian arch uki uki-lite verity-uki lifeboat rescatux rescapp adapt adapt-rootless erofs-check btrfs-rescue clean
+.PHONY: help bootloaders debian arch uki uki-lite verity-uki buildroot gpt-image mbr-image lifeboat rescatux rescapp adapt adapt-rootless erofs-check btrfs-rescue embiggen clean
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-20s %s\n", $$1, $$2}'
@@ -44,6 +44,31 @@ verity-uki-check-deps: ## Check dependencies for verity-uki builder
 	done
 	@echo ""
 	@echo "Install missing: apt install squashfs-tools cryptsetup-bin binutils sbsigntool"
+
+buildroot: ## Build cross-compiled recovery image using Buildroot. Usage: make buildroot BUILDROOT=/path/to/buildroot [ARCH=x86_64|aarch64] [FORMAT=squashfs|erofs]
+	@if [ -z "$(BUILDROOT)" ]; then echo "Usage: make buildroot BUILDROOT=/path/to/buildroot [ARCH=x86_64] [FORMAT=squashfs]"; exit 1; fi
+	cd builders/buildroot && sudo ./build.sh \
+		--buildroot "$(BUILDROOT)" \
+		$(if $(ARCH),--arch "$(ARCH)") \
+		$(if $(FORMAT),--format "$(FORMAT)") \
+		$(if $(OUTPUT),--output "$(OUTPUT)") \
+		$(if $(JOBS),--jobs "$(JOBS)")
+
+gpt-image: ## Build bootable GPT disk image (UEFI). Usage: make gpt-image [EFI=path] [ROOTFS=path] [OUTPUT=recovery.hdd] [VHD=1]
+	cd builders/gpt-image && ./build.sh \
+		$(if $(EFI),--efi "$(EFI)") \
+		$(if $(ROOTFS),--rootfs "$(ROOTFS)") \
+		$(if $(OUTPUT),--output "$(OUTPUT)") \
+		$(if $(VHD),--vhd) \
+		$(if $(SRC_DIR),--src-dir "$(SRC_DIR)")
+
+mbr-image: ## Build legacy BIOS MBR disk image. Usage: make mbr-image ROOTFS=path/to/rootfs.squashfs [OUTPUT=recovery-mbr.img]
+	@if [ -z "$(ROOTFS)" ]; then echo "Usage: make mbr-image ROOTFS=path/to/rootfs.squashfs [OUTPUT=recovery-mbr.img]"; exit 1; fi
+	cd builders/mbr-image && ./build.sh \
+		--rootfs "$(ROOTFS)" \
+		$(if $(OUTPUT),--output "$(OUTPUT)") \
+		$(if $(PARTYMIX_SRC),--src-dir "$(PARTYMIX_SRC)") \
+		$(if $(PARTYMIX_BIN),--bin "$(PARTYMIX_BIN)")
 
 lifeboat: ## Build Alpine-based single-file UEFI rescue EFI (requires gcc, make, wget, fakeroot)
 	cd builders/lifeboat && $(MAKE) build
@@ -92,6 +117,13 @@ erofs-check: ## Check an EROFS image. Usage: make erofs-check IMAGE=path/to/imag
 erofs-kernel-check: ## Check if running kernel supports EROFS
 	./common/scripts/erofs-rescue.sh kernel-check
 
+embiggen: ## Expand a partition to fill available disk space. Usage: make embiggen DEVICE=/dev/sda1
+	@if [ -z "$(DEVICE)" ]; then echo "Usage: make embiggen DEVICE=/dev/sda1  OR  make embiggen DEVICE=/"; exit 1; fi
+	sudo ./common/scripts/embiggen-disk.sh "$(DEVICE)"
+
+embiggen-check: ## Show unallocated disk space without resizing
+	./common/scripts/embiggen-disk.sh --check
+
 # === Cleanup ===
 
 clean: ## Remove build artifacts
@@ -114,3 +146,8 @@ clean: ## Remove build artifacts
 	rm -rf /tmp/verity-uki-work
 	rm -rf /tmp/fuse-overlay-work
 	rm -rf /tmp/btrfs-rescue
+	rm -rf /tmp/buildroot-recovery-work
+	rm -rf /tmp/gpt-image-work-*
+	rm -rf /tmp/mbr-image-work-*
+	rm -f builders/gpt-image/recovery.hdd
+	rm -f builders/mbr-image/recovery-mbr.img

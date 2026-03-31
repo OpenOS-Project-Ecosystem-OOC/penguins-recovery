@@ -175,6 +175,7 @@ cp -L /etc/resolv.conf "${ROOTFS}/etc/resolv.conf" 2>/dev/null || true
 
 # Run the family-specific installer
 export ROOTFS RECOVERY_ROOT FAMILY
+# shellcheck source=/dev/null
 source "$ADAPTER_SCRIPT"
 
 # Tear down chroot bind mounts

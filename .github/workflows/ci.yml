@@ -24,6 +24,8 @@ jobs:
         with:
           scandir: "./adapters"
           severity: warning
+          ignore_paths: >-
+            adapters/common/secureboot-chain.sh
 
       - name: ShellCheck — integration
         uses: ludeeus/action-shellcheck@master

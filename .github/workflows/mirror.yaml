@@ -12,6 +12,8 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout full history
         uses: actions/checkout@v4
@@ -21,6 +23,11 @@ jobs:
 
       - name: Fetch all branches and tags
         run: git fetch --all --tags --prune
+
+      - name: Reset local branch to match remote
+        run: |
+          git checkout main
+          git reset --hard origin/main
 
       - name: Update mirror repository
         run: |

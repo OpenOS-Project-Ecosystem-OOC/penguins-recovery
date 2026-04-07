@@ -43,6 +43,7 @@ jobs:
             > ~/.git-credentials
 
           git fetch mirror  # Ensure we have the latest state from the mirror before pushing
+          git fetch origin  # Fetch the latest state from the origin before pushing
           git push mirror --all --force
           git push mirror --tags --force
 

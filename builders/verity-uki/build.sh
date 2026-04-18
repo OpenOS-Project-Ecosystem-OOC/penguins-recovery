@@ -54,6 +54,7 @@ KEEP_WORK="false"
 
 info()  { echo -e "\033[1;32m[verity-uki]\033[0m $*"; }
 warn()  { echo -e "\033[1;33m[verity-uki]\033[0m $*"; }
+# shellcheck disable=SC2261  # single >&2 redirect, not competing
 error() { echo -e "\033[1;31m[verity-uki]\033[0m $*" >&2; }
 
 usage() { sed -n '2,/^$/s/^# //p' "$0"; exit 0; }

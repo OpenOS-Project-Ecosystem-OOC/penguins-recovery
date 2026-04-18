@@ -41,6 +41,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 info() { echo -e "\033[1;32m[uki-verity]\033[0m $*"; }
+# shellcheck disable=SC2261  # single >&2 redirect, not competing
 error() { echo -e "\033[1;31m[uki-verity]\033[0m $*" >&2; }
 
 if ! command -v mkosi &>/dev/null; then

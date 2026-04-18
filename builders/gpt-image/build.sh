@@ -42,6 +42,7 @@ SRC_DIR=""
 RED='\033[1;31m'; GRN='\033[1;32m'; YEL='\033[1;33m'; RST='\033[0m'
 info()  { echo -e "${GRN}[gpt-image]${RST} $*"; }
 warn()  { echo -e "${YEL}[gpt-image]${RST} $*"; }
+# shellcheck disable=SC2261  # single >&2 redirect, not competing
 error() { echo -e "${RED}[gpt-image]${RST} $*" >&2; }
 
 while [[ $# -gt 0 ]]; do

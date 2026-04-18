@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2261  # rescatux: > /dev/null 2>&1 &disown pattern
 # Rescatux LXQT Set Background script
 # Copyright (C) 2012,2013,2014,2015,2016 Adrian Gibanel Lopez
 #

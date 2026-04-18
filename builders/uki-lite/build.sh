@@ -38,6 +38,7 @@ SIGN="false"
 
 info()  { echo -e "\033[1;32m[uki-lite]\033[0m $*"; }
 warn()  { echo -e "\033[1;33m[uki-lite]\033[0m $*"; }
+# shellcheck disable=SC2261  # single >&2 redirect, not competing
 error() { echo -e "\033[1;31m[uki-lite]\033[0m $*" >&2; }
 
 usage() {

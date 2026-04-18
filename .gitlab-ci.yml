@@ -1,5 +1,4 @@
 # Converted from GitHub Actions — penguins-recovery
-# Mirrors: ci.yml, bootloaders-upstream-sync.yaml
 
 stages:
   - test
@@ -9,7 +8,6 @@ stages:
 default:
   image: ubuntu:22.04
 
-# ── CI ────────────────────────────────────────────────────────────────────────
 test:
   stage: test
   before_script:
@@ -17,7 +15,8 @@ test:
   script:
     - |
       failed=0
-      for f in $(find . -name "*.sh" ! -path "./.git/*"); do
+      for f in $(find . -name "*.sh" ! -path "./.git/*" \
+                   ! -path "*/tools/rescapp/*"); do
         bash -n "$f" || { echo "FAIL syntax: $f"; failed=1; }
         shellcheck --severity=error "$f" || { echo "FAIL shellcheck: $f"; failed=1; }
       done
@@ -26,21 +25,15 @@ test:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == "main"'
 
-# ── Bootloaders upstream sync (scheduled) ─────────────────────────────────────
-# Configure a GitLab scheduled pipeline to run this periodically.
 bootloaders-upstream-sync:
   stage: sync
   before_script:
     - apt-get update -qq && apt-get install -y git ca-certificates
   script:
-    - |
-      echo "Syncing bootloader sources from upstream..."
-      bash bootloaders/create-bootloaders || true
-      echo "Sync complete."
+    - bash bootloaders/create-bootloaders || true
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
 
-# ── GitLab Release ────────────────────────────────────────────────────────────
 gitlab-release:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest

@@ -39,3 +39,4 @@ builders/uki/mkosi.rootpw
 # Temporary
 *.tmp
 *.bak
+.npmrc

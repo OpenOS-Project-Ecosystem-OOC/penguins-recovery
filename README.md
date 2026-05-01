@@ -155,14 +155,14 @@ GPL-3.0. The `builders/uki/` directory retains its original EUPL-1.2 license
 ## Origins
 
 This project unifies:
-- [pieroproietti/penguins-bootloaders](https://github.com/pieroproietti/penguins-bootloaders)
+- [OpenOS-Project-Ecosystem-OOC/penguins-bootloaders](https://github.com/OpenOS-Project-Ecosystem-OOC/penguins-bootloaders)
 - [loaden/mini-rescue](https://github.com/loaden/mini-rescue)
 - [RouHim/platter-engineer](https://github.com/RouHim/platter-engineer)
 - [swsnr/rescue-image](https://github.com/swsnr/rescue-image)
 - [pop-os/upgrade](https://github.com/pop-os/upgrade)
 - [rescatux/rescatux](https://github.com/rescatux/rescatux)
 - [rescatux/rescapp](https://github.com/rescatux/rescapp)
-- [pieroproietti/penguins-eggs](https://github.com/pieroproietti/penguins-eggs) (naked ISO support via adapters)
+- [OpenOS-Project-Ecosystem-OOC/penguins-eggs](https://github.com/OpenOS-Project-Ecosystem-OOC/penguins-eggs) (naked ISO support via adapters)
 - [KDE/plasma-nano](https://invent.kde.org/plasma/plasma-nano) (GUI base shell)
 - [KDE/plasma-mobile](https://invent.kde.org/plasma/plasma-mobile) (touch profile components)
 - [KDE/plasma-desktop](https://invent.kde.org/plasma/plasma-desktop) (full profile components)

@@ -1,7 +1,7 @@
 name: Mirror to OpenOS-Project-Ecosystem-OOC
 
 # Sync chain:
-#   Interested-Deving-1896  ->(mirror.yaml)->  OpenOS-Project-OSP
+#   Interested-Deving-1896  ->(upstream mirror.yaml)->  OpenOS-Project-OSP
 #   OpenOS-Project-OSP  ->(this file)->  OpenOS-Project-Ecosystem-OOC
 
 on:
@@ -16,7 +16,7 @@ on:
 jobs:
   mirror:
     runs-on: ubuntu-latest
-    # Only run when executing in the OSP repo — no-op in upstream
+    # Only run when executing in the OSP repo — no-op if mirrored elsewhere
     if: github.repository == 'OpenOS-Project-OSP/penguins-recovery'
     steps:
       - name: Checkout full history
@@ -37,7 +37,7 @@ jobs:
             > ~/.git-credentials
 
           git remote add mirror \
-            "https://github.com/Interested-Deving-1896/penguins-recovery.git"
+            "https://github.com/OpenOS-Project-Ecosystem-OOC/penguins-recovery.git"
 
           git push mirror --all --force
           git push mirror --tags --force
